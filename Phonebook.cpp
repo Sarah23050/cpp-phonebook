@@ -15,12 +15,20 @@ class User {
 
    User(string n="",string e=""):username(n),email(e)  {}
 
-   void setLocation(string l) {
-        location = l;
+   string getUsername() const {
+    return username;
+   }
+   
+   string getEmail() const {
+    return email;
    }
 
-   string getLocation() {
+   string getLocation() const {
     return location;
+   }
+   
+   void setLocation(string l) {
+        location = l;
    }
 
    void info() {
@@ -86,21 +94,78 @@ class User {
     }
     cout<<"\nThe salary according to your skills and their levels: "<<salary<<"\n\n";
    }
+
+   void saveSkills(ofstream& file) const {
+    for(const auto& pair : skills) {
+        file << "SKILL " << pair.first << " " << pair.second << endl;
+    }
+   }
+
 };
 
 int findUserIndex(const vector<User>& users, const string& username) {
     for( int i = 0; i<users.size(); i++) {
         if(users[i].username == username) {
             return i;
-        }
-        return -1;
+        }    
     }
+    return -1;
+}
+
+void savetofile(const vector<User>& users) {
+    ofstream file("data.txt");
+
+    for(const auto& user : users) {
+        file << "USER " << user.getUsername() << " "
+        << user.getEmail() << " "
+        << user.getLocation() << endl;
+
+        user.saveSkills(file);
+
+        file << "ENDUSER" << endl;
+    }
+
+    file.close();
+}
+
+void loadfromfile(vector<User>& users) {
+    ifstream file("data.txt");
+    if (!file) return;
+
+    string word;
+    while (file >> word) {
+        if(word == "USER") {
+            string username,email,location;
+            file >> username >> email >> location;
+
+            User u(username,email);
+            u.setLocation(location);
+
+            while (file >> word) {
+                if (word == "ENDUSER") {
+                    break;
+                }
+
+                if (word == "SKILL") {
+                    string skill,level;
+                    file >> skill >> level;
+                    u.storeSkills(skill,level);
+                }
+            }
+
+            users.push_back(u);
+        }
+    }
+
+    file.close();
 }
 
 int main() {
     string username,email,location;
     int num = 1;
+
     vector <User> users;
+    loadfromfile(users);
 
     while(num!=5) {
       cout<<"------Menu------\n"
@@ -196,7 +261,7 @@ int main() {
 
           case 4: {
             
-            int deletedskills;
+            int deletedskillnum;
             string skill,username;
             
             cout<<"Enter your username to delete skills: ";
@@ -210,10 +275,10 @@ int main() {
             }
             
             cout<<"\nHow many skills would you like to delete: ";
-            cin>>deletedskills;
+            cin>>deletedskillnum;
             cout<<"Enter the skill/s you want to delete: ";
             
-            for(int i=0;i<deletedskills;i++) {
+            for(int i=0;i<deletedskillnum;i++) {
                 cin>>skill;
                 users[index].clearSkill(skill);
             }
@@ -223,6 +288,9 @@ int main() {
 
           case 5: {
           cout<<"\nYou have chosen to exit the application.\n\n";
+
+          savetofile(users);
+          
           break;
           }
 
