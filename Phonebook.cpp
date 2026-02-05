@@ -55,7 +55,7 @@ class User {
             }
         }
     } else {
-        cout<<"Here is all the skills and levels:\n";
+        cout<<"Here is all the skills and their corresponding levels:\n";
 
         for(auto i:skills) {
           cout<<i.first<<": "<<i.second<<"\n";
@@ -83,14 +83,23 @@ class User {
             salary += 3000;
         }
     }
-    cout<<"The salary according to your skills and their levels: "<<salary<<"\n\n";
+    cout<<"\nThe salary according to your skills and their levels: "<<salary<<"\n\n";
    }
 };
+
+int findUserIndex(const vector<User>& users, const string& username) {
+    for( int i = 0; i<users.size(); i++) {
+        if(users[i].username == username) {
+            return i;
+        }
+        return -1;
+    }
+}
 
 int main() {
     string username,email,location;
     int num = 1;
-    vector <User> user;
+    vector <User> users;
 
     while(num!=5) {
       cout<<"1. Register a new user\n"
@@ -112,8 +121,8 @@ int main() {
           cout<<"Enter your location: ";
           cin>>location;
 
-          user = User(username,email);
-          user.setLocation(location);
+          users.push_back(User(username, email));
+          users.back().setLocation(location);
 
           cout<<"Your process was completed succesfully!!\n\n";
 
@@ -121,29 +130,44 @@ int main() {
           }
           case 2: {
           int skillnum;
-          string Skill,level;
+          string Skill,level,username;
+
+          cout<<"Enter your username to add skills: ";
+          cin>>username;
+
+          int index = findUserIndex(users, username);
+          
+          if (index == -1) {
+            cout << "User not found!\n";
+            break;
+        }
 
           cout<<"\nHow many skills will you enter: ";
           cin>>skillnum;
+
           cout<<"Please enter the skill/s and the corresponding level (Beginner,Intermediate,Advanced) here:\n";
 
           for(int i=0;i<skillnum;i++) {
               cout<<"Skill "<<i+1<<": ";
               cin>>Skill;
+
               cout<<"Level: ";
               cin>>level;
-              user.storeSkills(Skill,level);
+
+              users[index].storeSkills(Skill,level);
           }
+
+          cout<<"Your skills have been added succesfully!!\n\n";
           break;
           }
 
           case 3: {
 
           cout<<"\n\nHere is your registration info:\n";
-          user.info();
+          users.back().info();
           cout<<endl;
-          user.showSkills();
-          user.calculateSalary();
+          users.back().showSkills();
+          users.back().calculateSalary();
 
           break;
           }
@@ -159,14 +183,14 @@ int main() {
 
           for(int i=0;i<deletedskills;i++) {
               cin>>skill;
-              user.clearSkill(skill);
+              users.back().clearSkill(skill);
           }
 
           break;
           }
 
           case 5: {
-          cout<<"You have chosen to exit the application1.\n";
+          cout<<"\nYou have chosen to exit the application.\n\n";
           break;
           }
 
