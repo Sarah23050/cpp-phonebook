@@ -172,6 +172,7 @@ int main() {
 
             string username;
             
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout<<"\nEnter your username: ";
             cin>>username;
 
