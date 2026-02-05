@@ -163,11 +163,24 @@ int main() {
 
           case 3: {
 
-          cout<<"\n\nHere is your registration info:\n";
-          users.back().info();
-          cout<<endl;
-          users.back().showSkills();
-          users.back().calculateSalary();
+            string username;
+            
+            cout<<"Enter your username: ";
+            cin>>username;
+
+            int index = findUserIndex(users, username);
+            
+            if (index == -1) {
+                cout << "User not found!\n\n";
+                break;
+            }
+
+            cout<<"\n\nHere is your registration info:\n";
+            users[index].info();
+            cout<<endl;
+            
+            users[index].showSkills();
+            users[index].calculateSalary();
 
           break;
           }
