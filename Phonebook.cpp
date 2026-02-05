@@ -48,7 +48,7 @@ class User {
         cout<<"Please enter the level: ";
         cin>>filterLevel;
 
-        cout<<"The list of skills that have the level: "<<filterLevel<<" is listed below.\n\n";
+        cout<<"The list of skills that have the level ' "<<filterLevel<<" ' is listed below.\n\n";
         for(auto i:skills) {
             if (i.second == filterLevel) {
                 cout<<"Skill: "<<i.first<<"    Level: "<<i.second<<"\n\n";
@@ -102,70 +102,77 @@ int main() {
     vector <User> users;
 
     while(num!=5) {
-      cout<<"1. Register a new user\n"
-          <<"2. Add new skills\n"
-          <<"3. Show user info\n"
-          <<"4. Delete a skill\n"
-          <<"5. Exit the application\n";
+      cout<<"------Menu------\n"
+      <<"1. Register a new user\n"
+      <<"2. Add new skills\n"
+      <<"3. Show user info\n"
+      <<"4. Delete a skill\n"
+      <<"5. Exit the application\n";
 
       cout<<"Enter your choice: ";
       cin>>num;
       
       switch(num) {
           case 1: {
-        
-          cout<<"\nEnter your username: ";
-          cin>>username;
-          cout<<"Enter your email address: ";
-          cin>>email;
-          cout<<"Enter your location: ";
-          cin>>location;
-
-          users.push_back(User(username, email));
-          users.back().setLocation(location);
-
-          cout<<"Your process was completed succesfully!!\n\n";
-
-          break;
-          }
-          case 2: {
-          int skillnum;
-          string Skill,level,username;
-
-          cout<<"Enter your username to add skills: ";
-          cin>>username;
-
-          int index = findUserIndex(users, username);
-          
-          if (index == -1) {
-            cout << "User not found!\n";
+            cout<<"\nEnter your username: ";
+            cin>>username;
+            cout<<"Enter your email address: ";
+            cin>>email;
+            cout<<"Enter your location: ";
+            cin>>location;
+            
+            int index = findUserIndex(users, username);
+            
+            if (index != -1) {
+                cout << "Username already exists!\n\n";
+                break;
+            }
+            
+            users.push_back(User(username, email));
+            users.back().setLocation(location);
+            
+            cout<<"\nYour process was completed succesfully!!\n\n";
+            
             break;
-        }
-
-          cout<<"\nHow many skills will you enter: ";
-          cin>>skillnum;
-
-          cout<<"Please enter the skill/s and the corresponding level (Beginner,Intermediate,Advanced) here:\n";
-
-          for(int i=0;i<skillnum;i++) {
-              cout<<"Skill "<<i+1<<": ";
-              cin>>Skill;
-
-              cout<<"Level: ";
-              cin>>level;
-
-              users[index].storeSkills(Skill,level);
           }
 
-          cout<<"Your skills have been added succesfully!!\n\n";
-          break;
+          case 2: {
+            int skillnum;
+            string Skill,level,username;
+            
+            cout<<"Enter your username to add skills: ";
+            cin>>username;
+            
+            int index = findUserIndex(users, username);
+            
+            if (index == -1) {
+                cout << "User not found!\n";
+                break;
+            }
+            
+            cout<<"\nHow many skills will you enter: ";
+            cin>>skillnum;
+            
+            cout<<"Please enter the skill/s and their corresponding level (Beginner,Intermediate,Advanced) here:\n";
+            
+            for(int i=0;i<skillnum;i++) {
+                cout<<"Skill "<<i+1<<": ";
+                cin>>Skill;
+                cout<<"Level: ";
+                cin>>level;
+                
+                users[index].storeSkills(Skill,level);
+            }
+            
+            cout<<"Your skills have been added succesfully!!\n\n";
+            break;
           }
 
           case 3: {
 
             string username;
             
-            cout<<"Enter your username: ";
+            cout<<"\nEnter your username: ";
             cin>>username;
 
             int index = findUserIndex(users, username);
@@ -178,7 +185,7 @@ int main() {
             cout<<"\n\nHere is your registration info:\n";
             users[index].info();
             cout<<endl;
-            
+
             users[index].showSkills();
             users[index].calculateSalary();
 
@@ -186,20 +193,30 @@ int main() {
           }
 
           case 4: {
-
-          int deletedskills;
-          string skill;
-
-          cout<<"\nHow many skills would you like to delete: ";
-          cin>>deletedskills;
-          cout<<"Enter the skill/s you want to delete: ";
-
-          for(int i=0;i<deletedskills;i++) {
-              cin>>skill;
-              users.back().clearSkill(skill);
-          }
-
-          break;
+            
+            int deletedskills;
+            string skill,username;
+            
+            cout<<"Enter your username to delete skills: ";
+            cin>>username;
+            
+            int index = findUserIndex(users, username);
+            
+            if (index == -1) {
+                cout << "User not found!\n\n";
+                break;
+            }
+            
+            cout<<"\nHow many skills would you like to delete: ";
+            cin>>deletedskills;
+            cout<<"Enter the skill/s you want to delete: ";
+            
+            for(int i=0;i<deletedskills;i++) {
+                cin>>skill;
+                users[index].clearSkill(skill);
+            }
+            
+            break;
           }
 
           case 5: {
