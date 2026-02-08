@@ -75,7 +75,7 @@ class User {
    void clearSkill(string s) {
 
     if(skills.erase(s)) {
-        cout<<"Skill deleted succesfully.\n\n";
+        cout<<"Skill deleted succesfully!!\n\n";
     } else cout<<"Skill not found!! Please try again.\n\n";
 
    }
@@ -261,7 +261,7 @@ int main() {
 
           case 4: {
             
-            int deletedskillnum;
+            int deletedskillnum,counter = 1;
             string skill,username;
             
             cout<<"Enter your username to delete skills: ";
@@ -274,14 +274,34 @@ int main() {
                 break;
             }
             
-            cout<<"\nHow many skills would you like to delete: ";
+            if (users[index].skills.empty()) {
+                cout << "You have no skills to delete!\n\n";
+                break;
+            }
+
+            vector<string> skillNames;
+
+            for(auto i:users[index].skills) {
+                cout<<counter<<". "<<"Skill: "<<i.first<<"    Level: "<<i.second<<"\n";
+                counter++;
+
+                skillNames.push_back(i.first);
+            }
+
+            cout<<"\nPlease enter the number of the skill you want to delete: ";
             cin>>deletedskillnum;
-            cout<<"Enter the skill/s you want to delete: ";
+
+            if(deletedskillnum < 1 || deletedskillnum > skillNames.size()) {
+                cout<<"Invalid choice! Please enter a number between 1 and "<<skillNames.size()<<".\n\n";
+                break;
+            }
+
+            users[index].clearSkill(skillNames[deletedskillnum - 1]);
             
-            for(int i=0;i<deletedskillnum;i++) {
+           /**  for(int i=0;i<deletedskillnum;i++) {
                 cin>>skill;
                 users[index].clearSkill(skill);
-            }
+            }*/
             
             break;
           }

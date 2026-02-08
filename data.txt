@@ -1,5 +1,4 @@
 USER sj ffghcc tk
 ENDUSER
 USER kj kj@mail lb
-SKILL cpp Advanced
 ENDUSER
