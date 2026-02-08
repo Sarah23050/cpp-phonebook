@@ -79,6 +79,43 @@ class User {
     } else cout<<"Skill not found!! Please try again.\n\n";
 
    }
+
+   void editSkill() {
+
+    if(skills.empty()) {
+        cout<<"You have no skills to edit!!\n\n";
+        return;
+    }
+
+    int counter = 1;
+    vector<string> skillNames;
+    
+    for(auto pair : skills) {
+        cout<<counter<<". "<<"Skill: "<<pair.first<<"    Level: "<<pair.second<<"\n";
+        counter++;
+        
+        skillNames.push_back(pair.first);
+    }
+
+    int skillnum;
+    string newLevel;
+
+    cout<<"\nPlease enter the number of the skill you want to edit: ";
+    cin>>skillnum;
+
+    if(skillnum < 1 || skillnum > skillNames.size()) {
+        cout<<"Invalid choice! Please enter a number between 1 and "<<skillNames.size()<<".\n\n";
+        return;
+    }
+
+    cout<<"Please enter the new level for the skill (Beginner, Intermediate or Advanced): ";
+    cin>>newLevel;
+
+    storeSkills(skillNames[skillnum - 1], newLevel);
+
+    cout<<"Your skill level has been edited succesfully!!\n\n";
+
+   }
    
    void calculateSalary() {
     double salary = 0;
@@ -167,13 +204,14 @@ int main() {
     vector <User> users;
     loadfromfile(users);
 
-    while(num!=5) {
+    while(num!=6) {
       cout<<"------Menu------\n"
       <<"1. Register a new user\n"
       <<"2. Add new skills\n"
       <<"3. Show user info\n"
       <<"4. Delete a skill\n"
-      <<"5. Exit the application\n";
+      <<"5. Edit skill level\n"
+      <<"6. Exit the application\n";
 
       cout<<"Enter your choice: ";
       cin>>num;
@@ -298,15 +336,28 @@ int main() {
 
             users[index].clearSkill(skillNames[deletedskillnum - 1]);
             
-           /**  for(int i=0;i<deletedskillnum;i++) {
-                cin>>skill;
-                users[index].clearSkill(skill);
-            }*/
-            
             break;
           }
 
           case 5: {
+            string username;
+
+            cout<<"Enter your username to edit skill level: ";
+            cin>>username;
+
+            int index = findUserIndex(users, username);
+            
+            if (index == -1) {
+                cout << "User not found!\n\n";
+                break;
+            }
+
+            users[index].editSkill();
+
+            break;
+
+          }
+          case 6: {
           cout<<"\nYou have chosen to exit the application.\n\n";
 
           savetofile(users);
@@ -315,7 +366,7 @@ int main() {
           }
 
           default:
-          cout<<"Invalid choice! Please enter an integer number between 1 and 5.\n";
+          cout<<"Invalid choice! Please enter an integer number between 1 and 6.\n";
       }
     }
 }

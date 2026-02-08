@@ -1,4 +1,6 @@
 USER sj ffghcc tk
+SKILL cpp Advanced
+SKILL java Intermediate
 ENDUSER
 USER kj kj@mail lb
 ENDUSER
