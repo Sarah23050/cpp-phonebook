@@ -45,3 +45,9 @@ A console-based phonebook application written in C++ that allows users to regist
    ```bash
    ./phonebook
    ```
+
+## Author
+
+- Sarah Joujou
+- Computer Engineering Student
+- GitHub: https://github.com/Sarah23050
